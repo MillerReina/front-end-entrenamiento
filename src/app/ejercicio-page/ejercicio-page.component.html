@@ -1,0 +1,76 @@
+<ngx-loading [show]="preload" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
+<div *ngIf="!preload" class="container-principal full-width">
+    <form autocomplete="off" [formGroup]="ejercicioForm" (ngSubmit)="createEjercicio()" style="width: 350px">
+        <div>
+            <span class="principal-title">CREAR NUEVO EJERCICIO </span>
+        </div>
+        <div>
+            <span class="secondary-title center-horizontal" style="margin-bottom: 1em">Nombre del ejercicio</span
+      >
+    </div>
+    <div class="center-horizontal">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Ejercicio</mat-label>
+        <input
+          matInput
+          formControlName="nombreEjercicio"
+          name="nombreEjercicio"
+        />
+        <mat-error *ngIf="nombreIsInvalid"> *Campo requerido* </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="center-horizontal">
+      <span class="secondary-title" style="margin-bottom: 1em"
+        >Descripción del ejercicio</span
+      >
+    </div>
+    <div class="center-horizontal">
+      <mat-form-field class="example full-width" appearance="fill">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="dscEjercicio" name="dscEjercicio" />
+        <mat-error *ngIf="dscEjercicioIsInvalid"> *Campo requerido* </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="center-horizontal">
+      <span class="secondary-title" style="margin-bottom: 1em"
+        >Selecciona un tipo de ejercicio</span
+      >
+    </div>
+    <div class="row full-width">
+      <div class="col-sm">
+        <button
+          class="btn-send"
+          mat-raised-button
+          type="button"
+          (click)="abrirDialog()"
+        >
+          <mat-icon>library_add</mat-icon>
+        </button>
+      </div>
+      <div class="col-sm">
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="tipoEjercicio" name="tipoEjercicio">
+            <mat-option
+              *ngFor="let tipoEjercicio of listaDeEjercicios.list"
+              [value]="tipoEjercicio.idTipoEjercicio"
+            >
+              {{ tipoEjercicio.dscTipoEjercicio }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="tipoIsInvalid"> *Campo requerido* </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="btn-section center-horizontal" style="margin-top: 15em">
+      <button class="btn-send" mat-raised-button type="submit">
+        <span>Crear</span>
+            </button>
+
+            <button mat-button type="button" (click)="cancelProcess()">
+        <span>Cancelar</span>
+      </button>
+        </div>
+    </form>
+</div>

@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Bebas Neue", cursive;
+}
+
+
+/* Container sizes */
+
+.full-width {
+    width: 100% !important;
+}
+
+.full-height {
+    height: 100% !important;
+}
+
+.full-width-viewport {
+    width: 100vw !important;
+}
+
+.full-height-viewport {
+    height: 100vw !important;
+}
+
+
+/** Container aligment */
+
+.center-horizontal {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.center-vertical {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.center-horizontal-vertical {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}

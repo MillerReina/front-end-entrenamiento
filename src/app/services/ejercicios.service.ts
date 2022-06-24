@@ -45,9 +45,10 @@ export class EjerciciosService {
   }
 
   deleteEjercicio(idEjercicio: number) {
-    return this.http.put<any>(
-      `${this.baseURL}/ejercicio/remover/${idEjercicio}`,
-      null
+    console.log(idEjercicio);
+
+    return this.http.delete<any>(
+      `${this.baseURL}/ejercicio/remover/${idEjercicio}`
     );
   }
 

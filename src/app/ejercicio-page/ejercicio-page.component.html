@@ -29,7 +29,9 @@
                 <th mat-header-cell *matHeaderCellDef style="text-align: center">
                     Descripción
                 </th>
-                <td mat-cell *matCellDef="let element">{{ element.dscEjercicio }}</td>
+                <td mat-cell *matCellDef="let element" style="padding-right: 5px">
+                    {{ element.dscEjercicio }}
+                </td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -37,7 +39,7 @@
                 <th mat-header-cell *matHeaderCellDef style="text-align: center">
                     Tipo
                 </th>
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" style="text-align: center">
                     <span class="badge badge-success" [ngStyle]="{ 'background-color': color }">{{ element.tipoEjercicio.dscTipoEjercicio }}</span
           >
         </td>

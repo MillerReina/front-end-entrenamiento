@@ -176,6 +176,8 @@ export class EjercicioPageComponent implements OnInit {
     this.ejerciciosService
       .deleteEjercicio(element.idEjercicio ?? 0)
       .subscribe((res) => {
+        console.log(res);
+
         this.preload = false;
       });
   }

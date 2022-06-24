@@ -36,6 +36,21 @@ export class EjerciciosService {
     return this.http.post<any>(`${this.baseURL}/ejercicio`, formData);
   }
 
+  putActualizarEjercicio(idEjercicio: number, formData: EjercicioForm) {
+    console.log(formData);
+    return this.http.put<any>(
+      `${this.baseURL}/ejercicio/${idEjercicio.toString()}`,
+      formData
+    );
+  }
+
+  deleteEjercicio(idEjercicio: number) {
+    return this.http.put<any>(
+      `${this.baseURL}/ejercicio/remover/${idEjercicio}`,
+      null
+    );
+  }
+
   /* TIPO DE EJERCICIO */
 
   getTiposDeEjercicio(): Observable<ITipoEjercicios> {

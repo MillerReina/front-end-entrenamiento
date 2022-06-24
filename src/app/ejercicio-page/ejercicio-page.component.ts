@@ -8,6 +8,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CrearTipoEjercicioDialogComponent } from '../components/crear-tipo-ejercicio-dialog/crear-tipo-ejercicio-dialog.component';
 import { EjercicioForm } from '../core/interfaces/ejercicio.interface';
+import { Ejercicio } from '../core/interfaces/all-ejercicios.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ejercicio-page',
@@ -15,23 +17,33 @@ import { EjercicioForm } from '../core/interfaces/ejercicio.interface';
   styleUrls: ['./ejercicio-page.component.scss'],
 })
 export class EjercicioPageComponent implements OnInit {
-  displayedColumns: string[] = ['numero', 'nombre', 'descripcion', 'tipo'];
+  displayedColumns: string[] = [
+    'numero',
+    'nombre',
+    'descripcion',
+    'tipo',
+    'acciones',
+  ];
   public dataSource!: any;
   public preload!: boolean;
   public isCreating!: boolean;
+  public isEditing!: boolean;
   public listaDeTiposDeEjercicios!: ITipoEjercicios;
   public ejercicioForm: FormGroup;
   private formDataEjercicio!: EjercicioForm;
   public color = '#';
   public letters = '0123456789ABCDEF';
+  public idEjercicio!: number;
 
   constructor(
     private ejerciciosService: EjerciciosService,
     private fb: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router
   ) {
     this.preload = true;
     this.isCreating = false;
+    this.isEditing = false;
 
     this.getRandomColor();
 
@@ -87,15 +99,37 @@ export class EjercicioPageComponent implements OnInit {
           this.formDataEjercicio = new EjercicioForm(
             this.ejercicioForm.get('dscEjercicio')?.value,
             this.ejercicioForm.get('nombreEjercicio')?.value,
-            res
+            res,
+            this.isEditing ? this.idEjercicio : null
           );
 
-          this.ejerciciosService
-            .postCrearEjercicio(this.formDataEjercicio)
-            .subscribe((__: any) => {
-              this.preload = false;
-              this.ejercicioForm.reset();
-            });
+          if (!this.isEditing) {
+            this.ejerciciosService
+              .postCrearEjercicio(this.formDataEjercicio)
+              .subscribe((__: any) => {
+                this.preload = false;
+                this.ejercicioForm.reset();
+                let currentUrl = this.router.url;
+                this.router
+                  .navigateByUrl('/', { skipLocationChange: true })
+                  .then(() => {
+                    this.router.navigate([currentUrl]);
+                  });
+              });
+          } else {
+            this.ejerciciosService
+              .putActualizarEjercicio(this.idEjercicio, this.formDataEjercicio)
+              .subscribe((__: any) => {
+                this.preload = false;
+                this.ejercicioForm.reset();
+                let currentUrl = this.router.url;
+                this.router
+                  .navigateByUrl('/', { skipLocationChange: true })
+                  .then(() => {
+                    this.router.navigate([currentUrl]);
+                  });
+              });
+          }
         });
     }
   }
@@ -116,6 +150,7 @@ export class EjercicioPageComponent implements OnInit {
 
   cancelProcess() {
     this.isCreating = false;
+    this.isEditing = false;
     this.ejercicioForm.reset();
   }
 
@@ -124,5 +159,24 @@ export class EjercicioPageComponent implements OnInit {
     for (var i = 0; i < 6; i++) {
       this.color += this.letters[Math.floor(Math.random() * 16)];
     }
+  }
+
+  goToEdit(element: Ejercicio) {
+    this.isEditing = true;
+    this.idEjercicio = element.idEjercicio ?? 0;
+    this.ejercicioForm.reset({
+      dscEjercicio: element.dscEjercicio,
+      nombreEjercicio: element.nombreEjercicio,
+      tipoEjercicio: element.tipoEjercicio.idTipoEjercicio,
+    });
+  }
+
+  deleteEjercicio(element: Ejercicio) {
+    this.preload = true;
+    this.ejerciciosService
+      .deleteEjercicio(element.idEjercicio ?? 0)
+      .subscribe((res) => {
+        this.preload = false;
+      });
   }
 }

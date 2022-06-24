@@ -1,6 +1,6 @@
 <ngx-loading [show]="preload" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
 <div *ngIf="!preload" class="container-principal full-width">
-    <div *ngIf="!isCreating" class="table-style">
+    <div *ngIf="!isCreating && !isEditing" class="table-style">
         <span class="principal-title">LISTADO DE EJERCICIOS</span>
         <button class="btn-send" mat-raised-button type="button" (click)="crearEjercicio()">
       <span>Crear</span>
@@ -26,37 +26,53 @@
 
             <!-- Weight Column -->
             <ng-container matColumnDef="descripcion">
-                <th mat-header-cell *matHeaderCellDef>Descripción</th>
+                <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                    Descripción
+                </th>
                 <td mat-cell *matCellDef="let element">{{ element.dscEjercicio }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="tipo">
-                <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                    Tipo
+                </th>
                 <td mat-cell *matCellDef="let element">
                     <span class="badge badge-success" [ngStyle]="{ 'background-color': color }">{{ element.tipoEjercicio.dscTipoEjercicio }}</span
           >
         </td>
       </ng-container>
+      <!-- actions Column -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Acciones
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge badge-success">
+            <button mat-stroked-button>
+              <mat-icon style="color: grey" (click)="goToEdit(element)"
+                >edit</mat-icon
+              >
+            </button>
+            <button mat-stroked-button (click)="deleteEjercicio(element)">
+              <mat-icon style="color: grey">delete</mat-icon>
+            </button>
+          </span>
+                </td>
+            </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </div>
-
-  <!-- SEGUNDA PARTE -->
-  <form
-    *ngIf="isCreating"
-    autocomplete="off"
-    [formGroup]="ejercicioForm"
-    (ngSubmit)="createEjercicio()"
-    style="width: 350px"
-  >
-    <div>
-      <span class="principal-title">CREAR NUEVO EJERCICIO </span>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
     </div>
-    <div>
-        <span class="secondary-title center-horizontal" style="margin-bottom: 1em">Nombre del ejercicio</span
+
+    <!-- SEGUNDA PARTE -->
+    <form *ngIf="isCreating || isEditing" autocomplete="off" [formGroup]="ejercicioForm" (ngSubmit)="createEjercicio()" style="width: 350px">
+        <div>
+            <span class="principal-title">CREAR NUEVO EJERCICIO </span>
+        </div>
+        <div>
+            <span class="secondary-title center-horizontal" style="margin-bottom: 1em">Nombre del ejercicio</span
       >
     </div>
     <div class="center-horizontal">
@@ -115,13 +131,22 @@
     </div>
 
     <div class="btn-section center-horizontal" style="margin-top: 15em">
-      <button class="btn-send" mat-raised-button type="submit">
+      <button
+        *ngIf="!isEditing"
+        class="btn-send"
+        mat-raised-button
+        type="submit"
+      >
         <span>Crear</span>
-        </button>
+            </button>
 
-        <button mat-button type="button" (click)="cancelProcess()">
+            <button *ngIf="isEditing" class="btn-send" mat-raised-button type="submit">
+        <span>Editar</span>
+      </button>
+
+            <button mat-button type="button" (click)="cancelProcess()">
         <span>Cancelar</span>
       </button>
-    </div>
+        </div>
     </form>
 </div>

@@ -1,8 +1,9 @@
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { EjercicioForm } from '../core/interfaces/ejercicio.interface';
+import { IEjercicios } from '../core/interfaces/all-ejercicios.interface';
 import {
   ITipoEjercicios,
   ITipoEjercicio,
@@ -18,16 +19,31 @@ export class EjerciciosService {
     this.baseURL = `${environment.localhost}`;
   }
 
+  /* EJERCICIO */
+
+  getTodosEjercicios() {
+    return this.http.get<IEjercicios>(`${this.baseURL}/ejercicio`).pipe(
+      tap((res) => {
+        for (let i = 0; i < res.list.length; i++) {
+          const element = res.list[i];
+          element.idEjercicio = i + 1;
+        }
+      })
+    );
+  }
+
+  postCrearEjercicio(formData: EjercicioForm) {
+    return this.http.post<any>(`${this.baseURL}/ejercicio`, formData);
+  }
+
+  /* TIPO DE EJERCICIO */
+
   getTiposDeEjercicio(): Observable<ITipoEjercicios> {
     return this.http.get<ITipoEjercicios>(`${this.baseURL}/tipo-ejercicio`);
   }
 
   postCrearTipoEjercicio(formData: any) {
     return this.http.post<any>(`${this.baseURL}/tipo-ejercicio`, formData);
-  }
-
-  postCrearEjercicio(formData: EjercicioForm) {
-    return this.http.post<any>(`${this.baseURL}/ejercicio`, formData);
   }
 
   getTipoDeEjercicioById(id: string) {

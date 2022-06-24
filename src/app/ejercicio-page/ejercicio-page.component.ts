@@ -9,21 +9,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { CrearTipoEjercicioDialogComponent } from '../components/crear-tipo-ejercicio-dialog/crear-tipo-ejercicio-dialog.component';
 import { EjercicioForm } from '../core/interfaces/ejercicio.interface';
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
-
 @Component({
   selector: 'app-ejercicio-page',
   templateUrl: './ejercicio-page.component.html',
   styleUrls: ['./ejercicio-page.component.scss'],
 })
 export class EjercicioPageComponent implements OnInit {
+  displayedColumns: string[] = ['numero', 'nombre', 'descripcion', 'tipo'];
+  public dataSource!: any;
   public preload!: boolean;
-  public listaDeEjercicios!: ITipoEjercicios;
+  public isCreating!: boolean;
+  public listaDeTiposDeEjercicios!: ITipoEjercicios;
   public ejercicioForm: FormGroup;
   private formDataEjercicio!: EjercicioForm;
+  public color = '#';
+  public letters = '0123456789ABCDEF';
 
   constructor(
     private ejerciciosService: EjerciciosService,
@@ -31,6 +31,9 @@ export class EjercicioPageComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.preload = true;
+    this.isCreating = false;
+
+    this.getRandomColor();
 
     this.ejercicioForm = this.fb.group({
       dscEjercicio: ['', [Validators.required]],
@@ -55,16 +58,20 @@ export class EjercicioPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._getTodosEjercicios();
     this._getTiposDeEjercicios();
+    this.preload = false;
   }
 
-  _getTiposDeEjercicios() {
-    this.ejerciciosService.getTiposDeEjercicio().subscribe((res) => {
-      this.listaDeEjercicios = res;
+  async _getTodosEjercicios() {
+    await this.ejerciciosService.getTodosEjercicios().subscribe((res) => {
+      this.dataSource = res.list;
+    });
+  }
 
-      setTimeout(() => {
-        this.preload = false;
-      }, 400);
+  async _getTiposDeEjercicios() {
+    await this.ejerciciosService.getTiposDeEjercicio().subscribe((res) => {
+      this.listaDeTiposDeEjercicios = res;
     });
   }
 
@@ -85,7 +92,7 @@ export class EjercicioPageComponent implements OnInit {
 
           this.ejerciciosService
             .postCrearEjercicio(this.formDataEjercicio)
-            .subscribe((__) => {
+            .subscribe((__: any) => {
               this.preload = false;
               this.ejercicioForm.reset();
             });
@@ -103,5 +110,19 @@ export class EjercicioPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe();
   }
 
-  cancelProcess() {}
+  crearEjercicio() {
+    this.isCreating = true;
+  }
+
+  cancelProcess() {
+    this.isCreating = false;
+    this.ejercicioForm.reset();
+  }
+
+  getRandomColor() {
+    this.color = '#'; // <-----------
+    for (var i = 0; i < 6; i++) {
+      this.color += this.letters[Math.floor(Math.random() * 16)];
+    }
+  }
 }

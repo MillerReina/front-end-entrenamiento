@@ -40,7 +40,15 @@ export class EspecialistaComponent implements OnInit {
     this.dateAdapter.setLocale('es-CO');
     this.especialistaForm = this.fb.group({
       fechaDeNacimiento: ['', [Validators.required]],
-      nombre: ['', [Validators.required]],
+      nombre: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(30),
+          Validators.max(30),
+        ],
+      ],
       registro: [''],
       tarjetaProfesional: ['', [Validators.required]],
     });

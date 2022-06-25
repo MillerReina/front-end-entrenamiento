@@ -1,3 +1,4 @@
+@import "./../../styles.scss";
 .mat-icon {
     color: white;
 }
@@ -53,5 +54,34 @@ img {
     .nav-link {
         color: white;
         cursor: pointer;
+    }
+}
+
+.img-container {
+    position: relative;
+    text-align: center;
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: #3a3a3a !important;
+    height: 100px !important;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.principal-title {
+    color: white;
+    font-size: 65px;
+    font-weight: 700;
+    font-family: "Bebas Neue", cursive;
+    .secondary-title {
+        font-style: unset;
     }
 }

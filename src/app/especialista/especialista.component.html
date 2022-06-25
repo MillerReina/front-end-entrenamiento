@@ -1,8 +1,67 @@
 <div class="container-principal full-width">
-    <div class="table-style">
+    <div class="table-style" *ngIf="!isCreating">
         <span class="principal-title">LISTADO DE ESPECIALISTAS</span>
-        <button class="btn-send" mat-raised-button type="button">
+        <button class="btn-send" mat-raised-button type="button" (click)="crearEspecialista()">
       <span>Crear</span>
     </button>
     </div>
+    <form *ngIf="isCreating" autocomplete="off" [formGroup]="especialistaForm" (ngSubmit)="crear()" style="width: 350px">
+        <div>
+            <span class="principal-title">CREAR NUEVO ESPECIALISTA </span>
+        </div>
+        <div>
+            <span class="secondary-title center-horizontal" style="margin-bottom: 1em">Nombre del especialista</span
+      >
+    </div>
+    <div class="center-horizontal">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" name="nombre" />
+        <mat-error *ngIf="nombreIsInvalid"> *Campo requerido* </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="center-horizontal">
+      <span class="secondary-title" style="margin-bottom: 1em">Tarjeta</span>
+        </div>
+        <div class="center-horizontal">
+            <mat-form-field class="example full-width" appearance="fill">
+                <mat-label>Tarjeta profesional</mat-label>
+                <input matInput formControlName="tarjetaProfesional" name="tarjetaProfesional" />
+                <mat-error *ngIf="tarjetaIsInvalid"> *Campo requerido* </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="center-horizontal">
+            <span class="secondary-title" style="margin-bottom: 1em">Nacimiento</span>
+        </div>
+        <div class="center-horizontal">
+            <mat-form-field appearance="fill" class="example-form-field">
+                <mat-label>Elige una fecha</mat-label>
+                <input matInput [matDatepicker]="datepicker" formControlName="fechaDeNacimiento" name="fechaDeNacimiento" />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker>
+                    <mat-datepicker-actions>
+                        <button mat-button matDatepickerCancel>Cancel</button>
+                        <button mat-raised-button color="primary" matDatepickerApply>
+              Apply
+            </button>
+                    </mat-datepicker-actions>
+                </mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="btn-section center-horizontal" style="margin-top: 15em">
+            <button class="btn-send" mat-raised-button type="submit">
+        <span>Crear</span>
+      </button>
+
+            <!-- <button *ngIf="isEditing" class="btn-send" mat-raised-button type="submit">
+          <span>Editar</span>
+        </button> -->
+
+            <button mat-button type="button" (click)="cancelProcess()">
+        <span>Cancelar</span>
+      </button>
+        </div>
+    </form>
 </div>

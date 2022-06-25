@@ -5,6 +5,7 @@ import { DateAdapter } from '@angular/material/core';
 import { EspecialistaService } from '../services/especialista.service';
 import { RegistroForm } from '../core/interfaces/registro.interface';
 import { EspecialistaForm } from '../core/interfaces/especialista.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-especialista',
@@ -28,7 +29,8 @@ export class EspecialistaComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dateAdapter: DateAdapter<Date>,
-    private especialistaService: EspecialistaService
+    private especialistaService: EspecialistaService,
+    private router: Router
   ) {
     this.preload = true;
     this.isCreating = false;
@@ -88,6 +90,12 @@ export class EspecialistaComponent implements OnInit {
         this.especialistaService.postCrearEspecialista(aux).subscribe((res) => {
           console.log(res);
           this.preload = false;
+          let currentUrl = this.router.url;
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate([currentUrl]);
+            });
         });
       });
     }

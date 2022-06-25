@@ -79,7 +79,9 @@ export class EspecialistaComponent implements OnInit {
   cargarEspecialistas() {
     this.especialistaService.getEspecialistas().subscribe((res) => {
       this.dataSource = res.list;
-      this.preload = false;
+      setTimeout(() => {
+        this.preload = false;
+      }, 1000);
     });
   }
 

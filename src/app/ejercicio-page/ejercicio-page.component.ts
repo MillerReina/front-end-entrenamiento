@@ -72,7 +72,9 @@ export class EjercicioPageComponent implements OnInit {
   ngOnInit(): void {
     this._getTodosEjercicios();
     this._getTiposDeEjercicios();
-    this.preload = false;
+    setTimeout(() => {
+      this.preload = false;
+    }, 1000);
   }
 
   async _getTodosEjercicios() {

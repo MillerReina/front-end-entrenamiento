@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,9 +13,18 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApplicationModule } from './components/application.module';
 import { EspecialistaComponent } from './especialista/especialista.component';
+/* IDIOMA */
+import { registerLocaleData } from '@angular/common';
+import localeCo from '@angular/common/locales/es-CO';
+registerLocaleData(localeCo);
 
 @NgModule({
-  declarations: [AppComponent, PrincipalComponent, EjercicioPageComponent, EspecialistaComponent],
+  declarations: [
+    AppComponent,
+    PrincipalComponent,
+    EjercicioPageComponent,
+    EspecialistaComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,7 +44,7 @@ import { EspecialistaComponent } from './especialista/especialista.component';
       fullScreenBackdrop: true,
     }),
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'es-CO' }],
   exports: [AngularMaterialModule],
   bootstrap: [AppComponent],
 })

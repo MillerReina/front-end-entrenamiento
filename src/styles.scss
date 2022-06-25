@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
+
+/* @import "./assets/styles/angular-material.scss"; */
+
 html,
 body {
     height: 100%;
@@ -46,4 +49,17 @@ body {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+}
+
+
+/* CSS alternative */
+
+.mat-calendar-body-active>.mat-calendar-body-today {
+    color: white !important;
+    background-color: grey !important;
+}
+
+.mat-calendar-body- .mat-calendar-body-selected {
+    color: white !important;
+    background-color: rgb(70, 70, 70) !important;
 }

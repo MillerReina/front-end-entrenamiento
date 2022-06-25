@@ -1,0 +1,7 @@
+@import "~@angular/material/theming";
+@include mat-core();
+$datepicker-primary: mat-palette($mat-indigo);
+$datepicker-accent: mat-palette($mat-pink, A200, A100, A400);
+$datepicker-theme: mat-light-theme($candy-app-primary, $candy-app-accent);
+// Apply the theme to your component
+@include mat-datepicker-theme($datepicker-theme);

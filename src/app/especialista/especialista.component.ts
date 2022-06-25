@@ -1,5 +1,9 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
+import { EspecialistaService } from '../services/especialista.service';
+import { RegistroForm } from '../core/interfaces/registro.interface';
 
 @Component({
   selector: 'app-especialista',
@@ -10,8 +14,13 @@ export class EspecialistaComponent implements OnInit {
   public isCreating!: boolean;
   public especialistaForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private dateAdapter: DateAdapter<Date>,
+    private especialistaService: EspecialistaService
+  ) {
     this.isCreating = false;
+    this.dateAdapter.setLocale('es-CO');
     this.especialistaForm = this.fb.group({
       fechaDeNacimiento: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
@@ -44,7 +53,13 @@ export class EspecialistaComponent implements OnInit {
     if (this.especialistaForm.invalid) {
       this.especialistaForm.markAllAsTouched();
     } else {
-      console.log('CREANDO');
+      const aux = new RegistroForm(
+        this.especialistaForm.get('fechaDeNacimiento')?.value
+      );
+
+      this.especialistaService.postCrearRegistro(aux).subscribe((res) => {
+        console.log(res.idRegistro);
+      });
     }
   }
 

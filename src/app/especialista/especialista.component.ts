@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { EspecialistaService } from '../services/especialista.service';
 import { RegistroForm } from '../core/interfaces/registro.interface';
+import { EspecialistaForm } from '../core/interfaces/especialista.interface';
 
 @Component({
   selector: 'app-especialista',
@@ -13,12 +14,14 @@ import { RegistroForm } from '../core/interfaces/registro.interface';
 export class EspecialistaComponent implements OnInit {
   public isCreating!: boolean;
   public especialistaForm!: FormGroup;
+  public preload!: boolean;
 
   constructor(
     private fb: FormBuilder,
     private dateAdapter: DateAdapter<Date>,
     private especialistaService: EspecialistaService
   ) {
+    this.preload = true;
     this.isCreating = false;
     this.dateAdapter.setLocale('es-CO');
     this.especialistaForm = this.fb.group({
@@ -43,22 +46,40 @@ export class EspecialistaComponent implements OnInit {
       this.especialistaForm.get('tarjetaProfesional')?.touched) as boolean;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cargarEspecialistas();
+  }
 
   crearEspecialista() {
     this.isCreating = true;
+  }
+
+  cargarEspecialistas() {
+    this.especialistaService.getEspecialistas().subscribe((res) => {
+      console.log(res);
+      this.preload = false;
+    });
   }
 
   crear() {
     if (this.especialistaForm.invalid) {
       this.especialistaForm.markAllAsTouched();
     } else {
-      const aux = new RegistroForm(
-        this.especialistaForm.get('fechaDeNacimiento')?.value
-      );
+      this.preload = true;
+      const aux = new RegistroForm(new Date());
 
       this.especialistaService.postCrearRegistro(aux).subscribe((res) => {
-        console.log(res.idRegistro);
+        const registro = res;
+        const aux = new EspecialistaForm(
+          this.especialistaForm.get('fechaDeNacimiento')?.value,
+          this.especialistaForm.get('nombre')?.value,
+          registro,
+          this.especialistaForm.get('tarjetaProfesional')?.value
+        );
+        this.especialistaService.postCrearEspecialista(aux).subscribe((res) => {
+          console.log(res);
+          this.preload = false;
+        });
       });
     }
   }

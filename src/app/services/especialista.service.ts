@@ -26,4 +26,15 @@ export class EspecialistaService {
   getEspecialistas() {
     return this.http.get<IEspecialistas>(`${this.baseURL}/especialista`);
   }
+
+  deleteEspecialista(id: number) {
+    return this.http.delete<any>(`${this.baseURL}/especialista/remover/${id}`);
+  }
+
+  updateEspecialista(idEspecialista: number, formData: EspecialistaForm) {
+    return this.http.put<any>(
+      `${this.baseURL}/especialista/${idEspecialista.toString()}`,
+      formData
+    );
+  }
 }

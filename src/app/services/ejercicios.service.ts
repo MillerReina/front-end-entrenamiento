@@ -37,7 +37,6 @@ export class EjerciciosService {
   }
 
   putActualizarEjercicio(idEjercicio: number, formData: EjercicioForm) {
-    console.log(formData);
     return this.http.put<any>(
       `${this.baseURL}/ejercicio/${idEjercicio.toString()}`,
       formData
@@ -45,8 +44,6 @@ export class EjerciciosService {
   }
 
   deleteEjercicio(idEjercicio: number) {
-    console.log(idEjercicio);
-
     return this.http.delete<any>(
       `${this.baseURL}/ejercicio/remover/${idEjercicio}`
     );

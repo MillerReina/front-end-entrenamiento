@@ -17,6 +17,8 @@ export class EspecialistaComponent implements OnInit {
   public especialistaForm!: FormGroup;
   public preload!: boolean;
   public dataSource!: any;
+  public isEditing!: boolean;
+  public idEspecialista!: number;
 
   displayedColumns: string[] = [
     'codigo',
@@ -34,6 +36,7 @@ export class EspecialistaComponent implements OnInit {
   ) {
     this.preload = true;
     this.isCreating = false;
+    this.isEditing = false;
     this.dateAdapter.setLocale('es-CO');
     this.especialistaForm = this.fb.group({
       fechaDeNacimiento: ['', [Validators.required]],
@@ -82,31 +85,69 @@ export class EspecialistaComponent implements OnInit {
       this.especialistaService.postCrearRegistro(aux).subscribe((res) => {
         const registro = res;
         const aux = new EspecialistaForm(
+          this.idEspecialista ? this.idEspecialista ?? 0 : null,
           this.especialistaForm.get('fechaDeNacimiento')?.value,
           this.especialistaForm.get('nombre')?.value,
           registro,
           this.especialistaForm.get('tarjetaProfesional')?.value
         );
-        this.especialistaService.postCrearEspecialista(aux).subscribe((res) => {
-          console.log(res);
-          this.preload = false;
-          let currentUrl = this.router.url;
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate([currentUrl]);
+        if (!this.isEditing) {
+          this.especialistaService
+            .postCrearEspecialista(aux)
+            .subscribe((res) => {
+              this.preload = false;
+              this._refreshPage();
             });
-        });
+        } else {
+          this.especialistaService
+            .updateEspecialista(this.idEspecialista, aux)
+            .subscribe((__: any) => {
+              this.preload = false;
+              this.especialistaForm.reset();
+              this._refreshPage();
+            });
+        }
       });
     }
   }
 
   cancelProcess() {
     this.isCreating = false;
+    this.isEditing = false;
     this.especialistaForm.reset();
   }
 
-  goToEdit(element: any) {}
+  goToEdit(element: any) {
+    console.log(element);
+    this.isEditing = true;
+    this.idEspecialista = element.idEspecialista ?? 0;
+    this.especialistaForm.reset({
+      fechaDeNacimiento: element.fechaDeNacimiento,
+      nombre: element.nombre,
+      tarjetaProfesional: element.tarjetaProfesional,
+    });
+  }
 
-  deleteEjercicio(element: any) {}
+  deleteEjercicio(element: any) {
+    this.preload = true;
+    this.especialistaService
+      .deleteEspecialista(element.idEspecialista)
+      .subscribe(
+        (__) => {
+          this.preload = false;
+          this._refreshPage();
+        },
+        (__) => {
+          this.preload = false;
+          this._refreshPage();
+        }
+      );
+  }
+
+  _refreshPage() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
+  }
 }

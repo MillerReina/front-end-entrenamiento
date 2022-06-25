@@ -1,6 +1,6 @@
 <ngx-loading [show]="preload" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
 <div *ngIf="!preload" class="container-principal full-width">
-    <div class="table-style" *ngIf="!isCreating">
+    <div class="table-style" *ngIf="!isCreating && !isEditing">
         <span class="principal-title">LISTADO DE ESPECIALISTAS</span>
         <button class="btn-send" mat-raised-button type="button" (click)="crearEspecialista()">
       <span>Crear</span>
@@ -67,7 +67,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
     </div>
-    <form *ngIf="isCreating" autocomplete="off" [formGroup]="especialistaForm" (ngSubmit)="crear()" style="width: 350px">
+    <form *ngIf="isCreating || isEditing" autocomplete="off" [formGroup]="especialistaForm" (ngSubmit)="crear()" style="width: 350px">
         <div>
             <span class="principal-title">CREAR NUEVO ESPECIALISTA </span>
         </div>
@@ -113,13 +113,13 @@
         </div>
 
         <div class="btn-section center-horizontal" style="margin-top: 15em">
-            <button class="btn-send" mat-raised-button type="submit">
+            <button *ngIf="!isEditing" class="btn-send" mat-raised-button type="submit">
         <span>Crear</span>
       </button>
 
-            <!-- <button *ngIf="isEditing" class="btn-send" mat-raised-button type="submit">
-          <span>Editar</span>
-        </button> -->
+            <button *ngIf="isEditing" class="btn-send" mat-raised-button type="submit">
+        <span>Editar</span>
+      </button>
 
             <button mat-button type="button" (click)="cancelProcess()">
         <span>Cancelar</span>

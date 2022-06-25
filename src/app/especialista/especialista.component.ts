@@ -15,6 +15,15 @@ export class EspecialistaComponent implements OnInit {
   public isCreating!: boolean;
   public especialistaForm!: FormGroup;
   public preload!: boolean;
+  public dataSource!: any;
+
+  displayedColumns: string[] = [
+    'codigo',
+    'nombre',
+    'fecha_nacimiento',
+    'tarjeta',
+    'acciones',
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +65,7 @@ export class EspecialistaComponent implements OnInit {
 
   cargarEspecialistas() {
     this.especialistaService.getEspecialistas().subscribe((res) => {
-      console.log(res);
+      this.dataSource = res.list;
       this.preload = false;
     });
   }
@@ -88,4 +97,8 @@ export class EspecialistaComponent implements OnInit {
     this.isCreating = false;
     this.especialistaForm.reset();
   }
+
+  goToEdit(element: any) {}
+
+  deleteEjercicio(element: any) {}
 }

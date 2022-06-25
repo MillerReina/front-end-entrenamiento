@@ -12,9 +12,10 @@ import { ngxLoadingAnimationTypes, NgxLoadingModule } from 'ngx-loading';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApplicationModule } from './components/application.module';
+import { EspecialistaComponent } from './especialista/especialista.component';
 
 @NgModule({
-  declarations: [AppComponent, PrincipalComponent, EjercicioPageComponent],
+  declarations: [AppComponent, PrincipalComponent, EjercicioPageComponent, EspecialistaComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
